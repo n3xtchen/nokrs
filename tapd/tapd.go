@@ -2,10 +2,8 @@
 package tapd
 
 import (
-    //"strings"
     "fmt"
     "net/http"
-    // "time"
     "io"
     "encoding/json"
     "bytes"
@@ -13,108 +11,59 @@ import (
     "nokrs/utils"
 )
 
-type Tapd struct {
+type Tapd[T any] struct {
     user string
     password string
     response *http.Response
+}
+
+type TapdBaseRespon[T any] struct {
+    Status int         `json:"status"`
+    Info   string      `json:"info"`
+    Data   T `json:"data"`
 }
 
 const (
     TapdApi string = "https://api.tapd.cn/"
 )
 
-// var httpClient = &http.Client{
-//     Timeout: time.Minute * 1,
-//     Transport: &http.Transport{
-//         MaxIdleConns: 10,
-//         MaxIdleConnsPerHost: 1,
-//         MaxConnsPerHost: 2,
-//         IdleConnTimeout: time.Minute * 3,
-//     },
-// }
-
-func NewTapd(user, pwd string) *Tapd {
-    return &Tapd{user: user, password: pwd}
+func NewTapd[T any](user, pwd string) *Tapd[TapdBaseRespon[T]] {
+    return &Tapd[TapdBaseRespon[T]]{user: user, password: pwd}
 }
 
-// func (c *Tapd) setHttpRequest(method string, uri string) *http.Request {
-//     r, _ := http.NewRequest(method, TapdApi+uri, nil)
-//     r.Header.Add("Content-Type", "application/json")
-//     r.SetBasicAuth(c.user, c.password)
-//     return r
-// }
-// 
-// func (c *Tapd) Do(method string, uri string) error {
-//     req := c.setHttpRequest(method, uri)
-//     respone, err := httpClient.Do(req)
-//     if err != nil {
-//         return err
-//     }
-// 
-//     c.response = respone
-//     fmt.Println(respone.Body)
-// 
-//     return nil
-// }
-
-type FetchOptions struct {
-    params map[string]string
-}
-
-type ModifyOptFunc func(opt *FetchOptions)
-
-func WithParams(params map[string]string) ModifyOptFunc {
-    return func(opt *FetchOptions) {
-        opt.params = params
-    }
-}
-
-func (c *Tapd) fetch(uri string, opts ...ModifyOptFunc) *http.Response {
-
-    opt := FetchOptions{
-        params: nil,
-    }
-
-    for _, fun := range opts {
-        fun(&opt)
-    }
+func (c *Tapd[_]) fetch(uri string, opts ...utils.ModifyOptFunc) *http.Response {
 
     if c.response != nil {
         return c.response
     }
 
-    auth := utils.NewAuth(c.user, c.password)
-    headers := map[string]string {
+    auth := utils.WithAuth(c.user, c.password)
+    headers := utils.WithHeaders(map[string]string {
         "Content-Type": "application/json",
-    }
+    })
+    opts = append(opts, auth, headers)
 
-    response, _ := utils.Get(TapdApi+uri, opt.params, headers, auth)
+    response, _ := utils.Get(TapdApi+uri, opts...)
     c.response = response
 
     return response
 }
 
-type TapdBaseRespon struct {
-    Status int         `json:"status"`
-    Info   string      `json:"info"`
-    Data   interface{} `json:"data"`
-}
-
-func (c *Tapd) toObj()  error {
+func(c *Tapd[T]) toObj() (*T, error) {
     buf := bytes.NewBuffer([]byte{})
-    _, merr := io.Copy(buf, c.response.Body)
+    _, err := io.Copy(buf, c.response.Body)
+
     fmt.Println(buf)
 
-    if merr !=nil {
-        return merr
+    if err !=nil {
+        return nil, err
     }
-    tmp := new(TapdBaseRespon)
-    lerr := json.Unmarshal(buf.Bytes(), tmp)
-    if lerr != nil {
-        return lerr
+    tmp := new(T)
+    json.Unmarshal(buf.Bytes(), tmp)
+    err = json.Unmarshal(buf.Bytes(), tmp)
+    if err != nil {
+        return nil, err
     }
-    fmt.Println(tmp)
-
-    return nil
+    return tmp, nil
 }
 
