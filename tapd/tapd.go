@@ -5,7 +5,7 @@ import (
     //"strings"
     "fmt"
     "net/http"
-    // "time"
+    "time"
     "io"
     "encoding/json"
     "bytes"
@@ -21,15 +21,15 @@ const (
     TapdApi string = "https://api.tapd.cn/"
 )
 
-// var httpClient = &http.Client{
-//     Timeout: time.Minute * 1,
-//     Transport: &http.Transport{
-//         MaxIdleConns: 10,
-//         MaxIdleConnsPerHost: 1,
-//         MaxConnsPerHost: 2,
-//         IdleConnTimeout: time.Minute * 3,
-//     },
-// }
+var httpClient = &http.Client{
+    Timeout: time.Minute * 1,
+    Transport: &http.Transport{
+        MaxIdleConns: 10,
+        MaxIdleConnsPerHost: 1,
+        MaxConnsPerHost: 2,
+        IdleConnTimeout: time.Minute * 3,
+    },
+}
 
 func NewTapd(user, pwd string) *Tapd {
     return &Tapd{user: user, password: pwd}
@@ -44,8 +44,6 @@ func (c *Tapd) setHttpRequest(method string, uri string) *http.Request {
 
 func (c *Tapd) Do(method string, uri string) error {
     req := c.setHttpRequest(method, uri)
-
-    httpClient := &http.Client{}
     respone, err := httpClient.Do(req)
     if err != nil {
         return err
