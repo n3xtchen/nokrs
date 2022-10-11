@@ -17,18 +17,18 @@ type Tapd[T any] struct {
     response *http.Response
 }
 
-type TapdBaseRespon[T any] struct {
+type ITapdBaseRespon struct {
     Status int         `json:"status"`
     Info   string      `json:"info"`
-    Data   T `json:"data"`
+    Data   interface{} `json:"data"`
 }
 
 const (
     TapdApi string = "https://api.tapd.cn/"
 )
 
-func NewTapd[T any](user, pwd, uri string) *Tapd[TapdBaseRespon[T]] {
-    return &Tapd[TapdBaseRespon[T]]{
+func NewTapd[T any](user, pwd, uri string) *Tapd[T] {
+    return &Tapd[T]{
         uri: uri,
         reqObj: map[string]requests.ModifyOptFunc{
             "auth": requests.WithAuth(user, pwd),
