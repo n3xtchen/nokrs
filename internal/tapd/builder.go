@@ -7,8 +7,8 @@ type Builder struct {
     Story Tapd[StoryResp]
 }
 
-func With(user, password string) *Tapd[any] {
-    return NewTapd[UserResp](user, password, "workspaces/users")
-}
+// func With(user, password string) *Tapd[any] {
+//     return NewTapd[UserResp](user, password, "workspaces/users")
+// }
 
 

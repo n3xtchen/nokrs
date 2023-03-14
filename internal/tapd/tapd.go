@@ -8,7 +8,7 @@ import (
     "encoding/json"
     "bytes"
 
-    "nokrs/utils/requests"
+    "nokrs/internal/requests"
 )
 
 type Tapd[T any] struct {
