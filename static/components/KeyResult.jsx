@@ -71,8 +71,8 @@ const KeyResult = ({keyResult, setObjectives, objectives, objectiveId}) => {
   };
 
   return (
-    <li className="flex items-center py-2">
-      <span className="flex-1 text-gray-700">KR{keyResult.id}: {keyResult.title}</span>
+    <li className="flex justify-between py-2">
+      <span className="flex-shrink-0 text-gray-700">KR{keyResult.id}: {keyResult.title}</span>
       <div className="flex items-center">
         <input
           type="number"
@@ -107,7 +107,6 @@ const KeyResult = ({keyResult, setObjectives, objectives, objectiveId}) => {
           showDropdown={showDropdown}
           setShowDropdown={setShowDropdown}
           handleDeleteEvt={handleDeleteKeyResult}
-          className="flex-shrink-0"
         />
       </div>
     </li>

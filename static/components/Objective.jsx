@@ -57,12 +57,12 @@ const Objective = ({ objective, objectives, setObjectives }) => {
   const [showDropdown, setShowDropdown] = useState(false);
 
   return (
-    <div
+    <li
 			className="bg-white rounded-xl p-8 mb-4"
-			onMouseLeave={() => setShowDropdown(false)}
+      onMouseLeave={() => setShowDropdown(false)}
     >
-      <div className="flex items-center mb-3">
-        <span className="flex-1 text-gray-700 font-bold text-lg mr-2">O{objective.id}: {objective.title}</span>
+      <div className="flex justify-between mb-3">
+        <span className="flex-shrink-0 text-gray-700 font-bold text-lg mr-2">O{objective.id}: {objective.title}</span>
         <div className="flex items-center">
           <input
             type="number"
@@ -119,8 +119,8 @@ const Objective = ({ objective, objectives, setObjectives }) => {
             />
           )) :
           <p className="text-gray-500">No key results added yet...</p>
-				}
-				<div className="flex items-center">
+        }
+				<li className="flex items-center py-2">
           <input
             type="text"
             placeholder="+ Add key result..."
@@ -129,9 +129,9 @@ const Objective = ({ objective, objectives, setObjectives }) => {
             onKeyDown={handleKeyDown}
             className={styles.addKeyResult}
           />
-        </div>
+        </li>
       </ul>
-    </div>
+    </li>
   );
 };
 

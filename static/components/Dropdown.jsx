@@ -3,12 +3,12 @@ import React from 'react';
 const styles = {
   more: [
     'bg-transparent',
-    'mx-2',
     'text-gray-500',
     'hover:text-gray-800',
     'font-bold',
+    'mr-2',
+    'px-2',
     'py-2',
-    'px-4',
     'rounded',
     'focus:outline-none',
     'focus:shadow-outline'
