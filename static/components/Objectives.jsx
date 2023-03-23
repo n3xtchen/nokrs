@@ -3,7 +3,6 @@ import Objective from './Objective';
 
 const styles = {
   addObjective: [
-    'apply',
 		'appearance-none',
 		'bg-transparent',
 		'border-none',

@@ -4,7 +4,6 @@ import KeyResult from './KeyResult';
 
 const styles = {
   addKeyResult: [
-    'apply',
     'appearance-none',
     'bg-transparent',
     'border-none',
@@ -58,7 +57,7 @@ const Objective = ({ objective, objectives, setObjectives }) => {
 
   return (
     <li
-			className="bg-white rounded-xl p-8 mb-4"
+			className="bg-white rounded-xl px-8 pt-8 pb-4 mb-4"
       onMouseLeave={() => setShowDropdown(false)}
     >
       <div className="flex justify-between mb-3">
